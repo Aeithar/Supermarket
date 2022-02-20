@@ -58,6 +58,35 @@ namespace SupermarketTests
         }
 
         [TestMethod]
+        public void Receipt_WeightZero_Test()
+        {
+            // Arrange
+            var supermarket = new Supermarket();
+            var banana = supermarket.PriceList.Find(i => i.Name == "Banana");
+
+            supermarket.Basket.Add(new Supermarket.Purchases
+            {
+                Item = banana,
+                Weight = 0
+            });
+
+            // Act
+            try
+            {
+                var receipt = supermarket.GenerateReceipt();
+            }
+            catch (System.ArgumentOutOfRangeException e)
+            {
+                // Assert
+                StringAssert.Contains(e.Message, Supermarket.BasketHasInvalidNumberOfItemsdMessage);
+                return;
+            }
+
+            Assert.Fail("The expected exception was not thrown.");
+
+        }
+
+        [TestMethod]
         public void Receipt_WeightInsteadOfQuantity_Test()
         {
             // Arrange
